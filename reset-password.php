@@ -36,8 +36,8 @@ if ($token) {
                     $stmt3 = $conn->prepare('DELETE FROM password_resets WHERE token = ?');
                     $stmt3->bind_param('s', $token);
                     $stmt3->execute();
-                    $message = 'Password has been reset. You can now <a href="login.php">login</a>.';
-                    $show_form = false;
+                    header('Location: dashboard.php');
+                    exit;
                 }
             }
         } else {

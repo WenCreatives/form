@@ -12,10 +12,14 @@ if ($conn->connect_error) {
 }
 
 $message = '';
+$message_class = '';
+$form_sent = false; // Added this variable to track if the form has been sent
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
     if (!$email) {
         $message = 'Invalid email address.';
+        $message_class = 'error';
     } else {
         // Check if user exists
         $stmt = $conn->prepare('SELECT id FROM users WHERE email = ?');
@@ -36,13 +40,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $reset_link = "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/reset-password.php?token=$token";
             $subject = 'Password Reset Request';
             $body = "Click <a href='$reset_link'>here</a> to reset your password. This link expires in 1 hour.";
-            if (sendMail($email, $subject, $body)) {
-                $message = 'A reset link has been sent to your email.';
+            $result = sendMail($email, $subject, $body);
+            if ($result === true) {
+                $message = 'A reset link has been sent to your email. Please check your mailbox.';
+                $message_class = 'success';
+                $form_sent = true;
             } else {
-                $message = 'Failed to send email. Please try again.';
+                $message = 'Failed to send reset email: ' . htmlspecialchars($result);
+                $message_class = 'error';
+                $form_sent = false;
             }
         } else {
             $message = 'If that email exists, a reset link has been sent.';
+            $message_class = 'info';
+            $form_sent = true; // If email doesn't exist, we still show the form
         }
         $stmt->close();
     }
@@ -117,8 +128,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         .message {
             margin-bottom: 1rem;
-            color: #d32f2f;
             font-weight: 500;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+        }
+        .message.success {
+            color: #388e3c;
+            background: #e8f5e9;
+        }
+        .message.error {
+            color: #d32f2f;
+            background: #ffebee;
+        }
+        .message.info {
+            color: #1976d2;
+            background: #e3f2fd;
         }
         .back-link {
             display: block;
@@ -141,12 +165,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="card">
         <h2>Forgot Password</h2>
-        <?php if ($message) echo '<div class="message">' . htmlspecialchars($message) . '</div>'; ?>
+        <?php if ($message) echo '<div class="message ' . $message_class . '">' . htmlspecialchars($message) . '</div>'; ?>
+        <?php if (!isset($form_sent) || !$form_sent): ?>
         <form action="forgot-password.php" method="post">
             <label for="email">Enter your email address</label>
             <input type="email" id="email" name="email" required>
             <button type="submit">Send Reset Link</button>
         </form>
+        <?php endif; ?>
         <a class="back-link" href="login.php">Back to Login</a>
     </div>
 </body>
