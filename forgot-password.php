@@ -39,7 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Send email
             $reset_link = "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/reset-password.php?token=$token";
             $subject = 'Password Reset Request';
-            $body = "Click <a href='$reset_link'>here</a> to reset your password. This link expires in 1 hour.";
+            $body = '<div style="font-family:Roboto,Arial,sans-serif;background:#f4f8fb;padding:32px 0;">
+                <div style="max-width:480px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(25,118,210,0.08);padding:32px 24px;text-align:center;">
+                    <h2 style="color:#1976d2;margin-bottom:16px;">OwenCreatives Password Reset</h2>
+                    <p style="color:#333;font-size:1.1rem;margin-bottom:24px;">We received a request to reset your password. Click the button below to set a new password. This link will expire in 1 hour.</p>
+                    <a href="' . $reset_link . '" style="display:inline-block;padding:12px 32px;background:#1976d2;color:#fff;border-radius:8px;font-weight:700;text-decoration:none;font-size:1.1rem;margin-bottom:24px;">Reset Password</a>
+                    <p style="color:#888;font-size:0.95rem;margin-top:32px;">If you did not request a password reset, you can safely ignore this email.<br><br>— OwenCreatives Team</p>
+                </div>
+            </div>';
             $result = sendMail($email, $subject, $body);
             if ($result === true) {
                 $message = 'A reset link has been sent to your email. Please check your mailbox.';

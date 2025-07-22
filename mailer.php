@@ -19,7 +19,7 @@ function sendMail($to, $subject, $body) {
         $mail->Port       = $smtp_port;
 
         //Recipients
-        $mail->setFrom($smtp_user, 'Your App Name');
+        $mail->setFrom($smtp_user, 'OwenCreatives');
         $mail->addAddress($to);
 
         //Content

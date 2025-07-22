@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Congratulations!</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -16,26 +16,44 @@
             align-items: center;
             justify-content: center;
         }
-        .card {
+        .congrats {
             background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-            padding: 2.5rem 2rem 2rem 2rem;
-            max-width: 350px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 3rem 2.5rem;
+            max-width: 500px;
             width: 100%;
             text-align: center;
+            animation: pop 0.7s cubic-bezier(.68,-0.55,.27,1.55);
         }
-        h2 {
-            color: #0d47a1;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
+        @keyframes pop {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .congrats h1 {
+            color: #1976d2;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1.2rem;
+        }
+        .congrats .emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .congrats p {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
         }
         .logout-link {
-            display: block;
+            display: inline-block;
             margin-top: 1.2rem;
             color: #d32f2f;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 700;
+            font-size: 1.1rem;
             transition: color 0.2s;
         }
         .logout-link:hover {
@@ -44,9 +62,10 @@
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>Welcome to Your Dashboard!</h2>
-        <p>You have successfully reset your password and logged in.</p>
+    <div class="congrats">
+        <span class="emoji">🎉🥳</span>
+        <h1>Congratulations!</h1>
+        <p>Happy Coding!<br>You have successfully learned how to reset your password.</p>
         <a class="logout-link" href="login.php">Logout</a>
     </div>
 </body>
